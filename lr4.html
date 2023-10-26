@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Лабораторна робота 3</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="center">Функціональне програмування</h1>
+      <h2 class="center">Факультет інформаційних технологій</h2>
+      <h2 class="center">Кафедра програмних систем та технологій</h2>
+      <div class="box">
+        <h1 class="center">Лабораторна робота 4</h1>
+        <h2 class="center">Програмування списків мовами функціонального програмування</h2>
+      </div>
+      <h2 class="right">Колоцей Денис Дмитрович</h2>
+      <h2 class="right">Група: ІПЗ-44мс, 4-й курс</h2>
+      <h2 class="right">Викладач: Ніколаєнко А.Ю.</h2>
+      <h2 class="center">2024</h2>
+      <div class="box">
+        <h2 class="center">Мета</h2>
+        <p>Опанувати теоретичні основи використання списків функціональними мовами та
+розробити програми обробки списків</p>
+        <h2 class="center">Варіант 3</h2>
+        <img src="https://i.imgur.com/EkE41M4.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/eZYS2gs.png" alt="Завантаження зображень">
+        <h2 class="center">Хід роботи</h2>
+        <h3 class="center">Обгрунтування вибору мови програмування</h3>
+        <p>Було обрано мову програмування Scheme. Scheme є функціональною мовою програмування, яка підтримує функції вищого порядку, замикання, рекурсію та інші функціональні концепції. Це робить її потужним інструментом для вирішення складних завдань, особливо в областях, де функціональне програмування є важливим, наприклад, в обробці даних. Вона відома своєю простотою та мінімалізмом в синтаксисі. Вона має дуже невелику кількість ключових слів і структурних елементів мови. Це дозволяє легко розуміти і змінювати код, що робить її відмінним вибором для навчання програмуванню та швидкого прототипування.</p>
+        <h3 class="center">Завдання 1</h3>
+        <h4>Код</h4>
+        <a href="https://www.jdoodle.com/a/6LQa">Посилання</a>
+        <pre>#lang racket
+(define (generate-odd-list n)
+  (define (generate-odd-list-helper n current result)
+    (cond
+      ((= n 0) (reverse result))
+      ((odd? current) (generate-odd-list-helper (- n 1) (+ current 2) (cons current result)))
+      (else (generate-odd-list-helper n (+ current 1) result))))
+  (generate-odd-list-helper n 1 '()))
+
+(define (add-next-odd-elements lst count)
+  (define (get-last-odd lst)
+    (if (odd? (car (reverse lst)))
+        (car (reverse lst))
+        (get-last-odd (cdr (reverse lst))))
+    )
+
+  (define (add-odd-elements-to-end lst count current)
+    (if (= count 0)
+        lst
+        (let ((odd-elem (+ 2 (get-last-odd lst))))
+          (add-odd-elements-to-end (append lst (list odd-elem)) (- count 1) (+ current 2)))))
+
+  (add-odd-elements-to-end lst count 1)
+  )
+
+(define (invert-from-index lst index)
+  (define (take lst n)
+    (if (or (null? lst) (= n 0))
+        '()
+        (cons (car lst) (take (cdr lst) (- n 1)))))
+
+  (define (drop lst n)
+    (if (or (null? lst) (= n 0))
+        lst
+        (drop (cdr lst) (- n 1))))
+
+  (let* ((prefix (take lst index))  ; Взять элементы до индекса
+         (suffix (reverse (drop lst (+ index 1)))))  ; Инвертировать и взять элементы после индекса
+    (append prefix suffix)))
+
+
+(define (squares-list lst)
+  (define (square x)
+    (* x x))
+
+  (map square lst))
+
+
+
+(define n 10) ; Кількість непарних чисел
+(define odd-list (generate-odd-list n))
+(display "Список непарних чисел: ")
+(display odd-list)
+(newline)
+
+(display "Введіть кількість елементів для додавання в кінець списку: ")
+(define count (read))
+(define modified-list (add-next-odd-elements odd-list count))
+(display "Список після додавання: ")
+(display modified-list)
+(newline)
+
+(display "Введіть позицію, з якої потрібно інвертувати список: ")
+(define position (read))
+(define inverted-list (invert-from-index modified-list position))
+(display "Список після інверсії: ")
+(display inverted-list)
+(newline)
+
+(display "Список квадратів чисел у вихідному списку: ")
+(display (squares-list inverted-list))
+(newline)
+
+</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/7Mn2giT.png" alt="Завантаження зображень">
+
+        <h3 class="center">Завдання 2</h3>
+        <h4>Код</h4>
+        <a href="https://www.jdoodle.com/a/6LQH">Посилання</a>
+        <pre>(define (exam-simulation students)
+  ; Створюємо два порожніх списки для студентів, які здали і не здали
+  (define students-passed '())
+  (define students-failed '())
+
+  ; Допоки є студенти в списку
+  (let loop ((remaining-students students))
+    (cond
+      ((null? remaining-students) ; Якщо список пустий, виводимо результат
+       (display "Студенти, які здали: ")
+       (display students-passed)
+       (newline)
+       (display "Студенти, які не здали: ")
+       (display students-failed)
+       (newline))
+      (else
+       ; Беремо перших двох студентів зі списку
+       (define student1 (car remaining-students))
+       (define student2 (cadr remaining-students))
+
+       ; Вирішуємо рандомно, чи студенти відповіли правильно (true - здали, false - не здали)
+       (define answer1 (if (= 1 (random 2)) #t #f))
+       (define answer2 (if (= 1 (random 2)) #t #f))
+
+       ; Перевіряємо, чи студенти здали
+       (if answer1
+           (set! students-passed (cons student1 students-passed))
+           (set! students-failed (cons student1 students-failed))
+           )
+
+       (if answer2
+           (set! students-passed (cons student2 students-passed))
+           (set! students-failed (cons student2 students-failed))
+           )
+
+       ; Рекурсивно викликаємо функцію для інших студентів у списку
+       (loop (cddr remaining-students)))))
+  )
+
+; Приклад використання функції
+(define students-list '(1 2 3 4 5 6 7 8 9 10))
+(exam-simulation students-list)</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/rO9QLxl.png" alt="Завантаження зображень">
+        <h2 class="center">Висновок</h2>
+        <p>В першому завданні було написано функції для створення, модифікації та обробки списків непарних натуральних чисел у мові Scheme. Для цього були створені функції для додавання елементів в кінець списку, інвертування списку з певної позиції до кінця та створення нового списку, що містить квадрати чисел вхідного списку.</p>
+        <p>В другому завданні було змодельовано бізнес-процес здачі усних іспитів в режимі реального часу. Функція приймає список студентів. В процесі іспиту студенти по черзі взаємодіють з екзаменатором і намагаються відповісти на запитання. Якщо їх відповіді правильні, їх ім'я додається до списку тих, хто здав іспит. В іншому випадку їх ім'я додається до списку тих, кому призначена перездача.</p>
+        <p>Ці завдання показують, як можна використовувати мову Scheme для операцій зі списками та моделювання бізнес-процесів в компаніях. Scheme надає можливість легко працювати зі списками, що робить його потужним інструментом для обробки даних та автоматизації процесів.</p>
+      </div>
+    </div>
+  </body>
+</html>
