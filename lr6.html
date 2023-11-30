@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Лабораторна робота 3</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="center">Функціональне програмування</h1>
+      <h2 class="center">Факультет інформаційних технологій</h2>
+      <h2 class="center">Кафедра програмних систем та технологій</h2>
+      <div class="box">
+        <h1 class="center">Лабораторна робота 5</h1>
+        <h2 class="center">Обробка раціональних та комплексних чисел
+мовами функціонального програмування</h2>
+      </div>
+      <h2 class="right">Колоцей Денис Дмитрович</h2>
+      <h2 class="right">Група: ІПЗ-44мс, 4-й курс</h2>
+      <h2 class="right">Викладач: Ніколаєнко А.Ю.</h2>
+      <h2 class="center">2024</h2>
+      <div class="box">
+        <h2 class="center">Мета</h2>
+        <p>Опанувати технологію абстракції даних в мовах функціонального програмування.
+Реалізувати програму обробки раціональних та комплексних чисел мовами функціонального
+програмування, представивши ці числа конструкціями типу «пара»</p>
+        <h2 class="center">Варіант 3</h2>
+        <img src="https://i.imgur.com/Yl52Exs.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/T0Y8u6T.png" alt="Завантаження зображень">
+        <h2 class="center">Хід роботи</h2>
+        <h3 class="center">Обгрунтування вибору мови програмування</h3>
+        <p>Було обрано мову програмування Scheme. Scheme є функціональною мовою програмування, яка підтримує функції вищого порядку, замикання, рекурсію та інші функціональні концепції. Це робить її потужним інструментом для вирішення складних завдань, особливо в областях, де функціональне програмування є важливим, наприклад, в обробці даних. Вона відома своєю простотою та мінімалізмом в синтаксисі. Вона має дуже невелику кількість ключових слів і структурних елементів мови. Це дозволяє легко розуміти і змінювати код, що робить її відмінним вибором для навчання програмуванню та швидкого прототипування.</p>
+        <h3 class="center">Завдання 1</h3>
+        <h4>Код</h4>
+        <a href="https://www.jdoodle.com/a/6Ndq">Посилання</a>
+        <pre>(define (number-for-n n)
+  (+ n n (/ n 2) (/ n 4) 1)
+)
+(define (find-number-of-geese)
+  (let ((total-geese 1)) ; Починаємо з 1 гуся
+    (let loop ((n 1))
+      (if (= (number-for-n n) 100) ; Якщо кількість гусей відповідає умові
+          n
+          (loop (+ n 1))))))
+
+(display "Кількість гусей в зграї: ")
+(display (find-number-of-geese))
+(newline)
+
+</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/npJ5B3s.png" alt="Завантаження зображень">
+
+        <h3 class="center">Завдання 2</h3>
+        <h4>Код</h4>
+        <a href="https://www.jdoodle.com/a/6Ndv">Посилання</a>
+        <pre>(define (make-complex a b)
+  (list a b))
+
+(define (real-part complex)
+  (car complex))
+
+(define (imaginary-part complex)
+  (cadr complex))
+
+(define (complex-add complex1 complex2)
+  (make-complex (+ (real-part complex1) (real-part complex2))
+               (+ (imaginary-part complex1) (imaginary-part complex2))))
+
+(define (complex-sum lst)
+  (if (null? lst)
+      (make-complex 0 0)
+      (complex-add (car lst) (complex-sum (cdr lst)))))
+
+(define complex-list '((1 2) (3 4) (5 6))) ; Замініть цей список на свій список комплексних чисел
+
+(display "Список комплексних чисел: ")
+(display complex-list)
+(newline)
+
+(define sum-of-complex (complex-sum complex-list))
+
+(display "Сума комплексних чисел: ")
+(display sum-of-complex)
+(newline)</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/BgiFZtn.png" alt="Завантаження зображень">
+        <h2 class="center">Висновок</h2>
+        <p>В лабораторній роботі було розроблено функції для вирішення поставлених задач використовуючи раціональні та комплексні числа. В першому завданні було використано раціональні числа для обчислення кількості гусей. В другому використовувалися компексні числа.</p>
+      </div>
+    </div>
+  </body>
+</html>

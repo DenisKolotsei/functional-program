@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Лабораторна робота 3</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="center">Функціональне програмування</h1>
+      <h2 class="center">Факультет інформаційних технологій</h2>
+      <h2 class="center">Кафедра програмних систем та технологій</h2>
+      <div class="box">
+        <h1 class="center">Лабораторна робота 8</h1>
+        <h2 class="center">Символьні обчислення мовами функціонального програмування.
+Операції з многочленами.</h2>
+      </div>
+      <h2 class="right">Колоцей Денис Дмитрович</h2>
+      <h2 class="right">Група: ІПЗ-44мс, 4-й курс</h2>
+      <h2 class="right">Викладач: Ніколаєнко А.Ю.</h2>
+      <h2 class="center">2024</h2>
+      <div class="box">
+        <h2 class="center">Мета</h2>
+        <p>Опанувати теоретичні основи символьних обчислень мовами функціонального
+програмування. Розробити програми символьного диференціювання та реалізації арифметики
+поліномів</p>
+        <h2 class="center">Варіант 3</h2>
+        <img src="https://i.imgur.com/b43yv0j.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/VnFgBYw.png" alt="Завантаження зображень">
+        <h2 class="center">Хід роботи</h2>
+        <h3 class="center">Обгрунтування вибору мови програмування</h3>
+        <p>Було обрано мову програмування Scheme. Scheme є функціональною мовою програмування, яка підтримує функції вищого порядку, замикання, рекурсію та інші функціональні концепції. Це робить її потужним інструментом для вирішення складних завдань, особливо в областях, де функціональне програмування є важливим, наприклад, в обробці даних. Вона відома своєю простотою та мінімалізмом в синтаксисі. Вона має дуже невелику кількість ключових слів і структурних елементів мови. Це дозволяє легко розуміти і змінювати код, що робить її відмінним вибором для навчання програмуванню та швидкого прототипування.</p>
+        <h3 class="center">Завдання 1</h3>
+        <h4>Код</h4>
+        <pre>(define (differentiate expr var)
+  (cond
+    ((number? expr) 0)
+    ((eq? expr var) 1)
+    ((pair? expr)
+     (let ((op (car expr))
+           (operands (cdr expr)))
+       (case op
+         ((+) (cons '+ (map (lambda (operand) (differentiate operand var)) operands)))
+         ((*) (if (= (length operands) 2)
+                  (let ((u (car operands))
+                        (v (cadr operands)))
+                    `(+ (* ,u (differentiate v var))
+                        (* ,v (differentiate u var))))
+                  (error "Only binary multiplication is supported")))
+         ((^) (if (= (length operands) 2)
+                  (let ((base (car operands))
+                        (exponent (cadr operands)))
+                    `(* ,exponent (^ ,base (- ,exponent 1))))
+                  (error "Exponentiation is supported only for binary expressions")))
+         (else (error "Unsupported operator")))))
+    (else 0)))
+
+(define (expand expr)
+  (cond
+    ((number? expr) expr)
+    ((symbol? expr) expr)
+    ((pair? expr)
+     (let ((op (car expr))
+           (operands (cdr expr)))
+       (case op
+         ((+)
+          (let ((expanded-operands (map expand operands)))
+            (if (andmap number? expanded-operands)
+                (apply + expanded-operands)
+                `(+ ,@expanded-operands))))
+         ((*)
+          (let ((expanded-operands (map expand operands)))
+            (if (andmap number? expanded-operands)
+                (apply * expanded-operands)
+                `(* ,@expanded-operands))))
+         ((^) (if (= (length operands) 2)
+                  (let ((base (car operands))
+                        (exponent (cadr operands)))
+                    (expt (expand base) (expand exponent)))
+                  (error "Exponentiation is supported only for binary expressions")))
+         (else (error "Unsupported operator")))))
+    (else expr)))
+
+(define (expt base exponent)
+  (if (and (number? base) (number? exponent))
+      (expt base exponent)
+      `(^ ,base ,exponent)))
+
+(define (check_factorization expr)
+  (let ((expanded (expand expr)))
+    (if (equal? expr expanded)
+        (display "Factorization is correct.")
+        (begin
+          (display "Factorization is incorrect. Expanded expression: ")
+          (display expanded)))))
+
+;; Приклад використання:
+
+(define P '(* 3 (^ x 2))) ; Задайте свій многочлен
+(define dP (differentiate P 'x))
+
+(display "Original expression: ")
+(display P)
+(newline)
+
+(display "Differentiated expression with respect to x: ")
+(display dP)
+(newline)
+
+(display "Checking factorization: ")
+(check_factorization P)
+(newline)</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/AiKNbn2.png" alt="Завантаження зображень">
+      </div>
+    </div>
+  </body>
+</html>

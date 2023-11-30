@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Лабораторна робота 3</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="center">Функціональне програмування</h1>
+      <h2 class="center">Факультет інформаційних технологій</h2>
+      <h2 class="center">Кафедра програмних систем та технологій</h2>
+      <div class="box">
+        <h1 class="center">Лабораторна робота 7</h1>
+        <h2 class="center">Обробка рядків та файлів
+мовами функціонального програмування</h2>
+      </div>
+      <h2 class="right">Колоцей Денис Дмитрович</h2>
+      <h2 class="right">Група: ІПЗ-44мс, 4-й курс</h2>
+      <h2 class="right">Викладач: Ніколаєнко А.Ю.</h2>
+      <h2 class="center">2024</h2>
+      <div class="box">
+        <h2 class="center">Мета</h2>
+        <p>Опанувати теоретичні основи обробки рядків та текстових файлів мовами
+функціонального програмування та розробити програми їх реалізації</p>
+        <h2 class="center">Варіант 3</h2>
+        <img src="https://i.imgur.com/3bLSw27.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/qOTmqAt.png" alt="Завантаження зображень">
+        <h2 class="center">Хід роботи</h2>
+        <h3 class="center">Обгрунтування вибору мови програмування</h3>
+        <p>Було обрано мову програмування Scheme. Scheme є функціональною мовою програмування, яка підтримує функції вищого порядку, замикання, рекурсію та інші функціональні концепції. Це робить її потужним інструментом для вирішення складних завдань, особливо в областях, де функціональне програмування є важливим, наприклад, в обробці даних. Вона відома своєю простотою та мінімалізмом в синтаксисі. Вона має дуже невелику кількість ключових слів і структурних елементів мови. Це дозволяє легко розуміти і змінювати код, що робить її відмінним вибором для навчання програмуванню та швидкого прототипування.</p>
+        <h3 class="center">Завдання 1</h3>
+        <h4>Код</h4>
+        <pre>; Процедура для запису n рядків тексту у файл
+(define (write-to-file filename n)
+  (with-output-to-file filename
+    (lambda ()
+      (define (write-lines n)
+        (if (= n 0)
+            '()
+            (begin
+              (display (read-line))
+              (newline)
+              (write-lines (- n 1)))))
+      (write-lines n))))
+
+; Процедура для зчитування рядків із файлу та виведення їх на екран
+(define (read-and-display filename)
+  (with-input-from-file filename
+    (lambda ()
+      (let loop ((line (read-line)))
+        (if (eof-object? line)
+            '()
+            (begin
+              (display line)
+              (newline)
+              (loop (read-line))))))))
+
+; Процедура для заміни входжень заданого слова на нове слово та запису результату в новий файл
+(define (replace-word-and-write input-filename output-filename old-word new-word)
+  (with-input-from-file input-filename
+    (lambda ()
+      (with-output-to-file output-filename
+        (lambda ()
+          (let loop ((line (read-line)))
+            (if (eof-object? line)
+                '()
+                (begin
+                  (let ((modified-line (string-replace line old-word new-word)))
+                    (display modified-line)
+                    (newline))
+                  (loop (read-line))))))))))
+
+
+
+; Допоміжна функція для заміни входжень слова у рядку
+(define (string-replace str old new)
+  (string-join (string-split str old) new))
+
+; Приклад використання:
+(write-to-file "input.txt" 3) ; Записати 3 рядки в файл
+(read-and-display "input.txt") ; Зчитати та вивести рядки з файлу
+(replace-word-and-write "input.txt" "output.txt" "lll" "ddd") ; Замінити слово та записати результат в новий файл</pre>
+        <h4>Результат</h4>
+        <img src="https://i.imgur.com/O1OCyTS.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/Gd3rAYE.png" alt="Завантаження зображень">
+        <img src="https://i.imgur.com/XcZRdm1.png" alt="Завантаження зображень">
+      </div>
+    </div>
+  </body>
+</html>
